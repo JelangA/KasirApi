@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "5ebNfLO7s+YUWDeeKrdh0ZqAUVJHVITOzjQZaSPWnpQ=",
+  "Source": "cashierAPI",
+  "BasePath": "_content/cashierAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

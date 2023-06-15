@@ -1,0 +1,25 @@
+initial{
+
+    //inisial migrasi
+    dotnet ef migrations add InitialCreate
+
+    //jalankan migrasi
+    dotnet ef database update
+}
+
+hapus tabel{
+
+}
+
+hapus database{
+
+    //pilih migrasi
+    dotnet ef database update 0
+
+    //hapus database
+    dotnet ef database drop
+}
+
+command OP!!! crud auto {
+     dotnet-aspnet-codegenerator controller -name <AkunCSController> -async -api -m <AkunCS> -dc <databaseContext> -outDir Controllers
+}
