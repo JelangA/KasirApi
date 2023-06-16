@@ -18,6 +18,9 @@ hapus database{
 
     //hapus database
     dotnet ef database drop
+
+    //hapus file
+    dotnet ef migrations remove
 }
 
 command OP!!! crud auto {

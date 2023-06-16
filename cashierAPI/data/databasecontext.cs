@@ -14,16 +14,26 @@ public class databaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //akuncs
         modelBuilder.Entity<AkunCS>()
             .HasKey(a => a.id_akun);
-        modelBuilder.Entity<Closing>()
-            .HasKey(a => a.id_closing);
+
+        //konsumen
         modelBuilder.Entity<Konsumen>()
-            .HasKey(a => a.id_konsumen);
+            .HasKey(k => k.id_konsumen);
+
+
+        //closing
+        modelBuilder.Entity<Closing>()
+            .HasKey(c => c.id_closing);
+
+        //product
         modelBuilder.Entity<Product>()
-            .HasKey(a => a.id_product);
+            .HasKey(p => p.id_product);
+
+        //variant
         modelBuilder.Entity<Variant>()
-            .HasKey(a => a.id_variant);
+            .HasKey(v => v.id_variant);
     }
 
     public DbSet<cashierAPI.Models.Product> Product { get; set; } = default!;

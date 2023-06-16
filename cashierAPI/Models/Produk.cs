@@ -8,7 +8,7 @@ namespace cashierAPI.Models{
         public int id_product { get; set; }
 
         [Required]
-        public string? nama_product { get; set; }
+        public string nama_product { get; set; }
 
         [Required]
         public int jenis_barang { get; set; }
@@ -20,10 +20,10 @@ namespace cashierAPI.Models{
         public int total_stock { get; set; }
 
         [Required]
-        public string? deskripsi { get; set; }
+        public string deskripsi { get; set; }
 
         [Required]
-        public List<Variant>? list_variant { get; set; }
+        public string list_variant { get; set; }
 
         [Required]
         public bool status { get; set; }
