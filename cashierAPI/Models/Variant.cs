@@ -1,11 +1,15 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace cashierAPI.Models{
-
-    public class Variant{
-
+namespace cashierAPI.Models
+{
+    public class Variant
+    {
         [Key]
         public int id_variant { get; set; }
+
+        [Required]
+        public int product_id { get; set; }
 
         [Required]
         public string? nama_variant { get; set; }
@@ -16,7 +20,7 @@ namespace cashierAPI.Models{
         [Required]
         public int stok { get; set; }
 
-        [Required]
         public string? keterangan { get; set; }
     }
+
 }

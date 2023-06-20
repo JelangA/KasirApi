@@ -1,4 +1,5 @@
-using cashierAPI.data;
+
+using cashierAPI.database;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

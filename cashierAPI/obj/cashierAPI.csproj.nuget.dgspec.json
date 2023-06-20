@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\jelang\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj": {}
+    "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj": {}
   },
   "projects": {
-    "d:\\jelang\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj": {
+    "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\jelang\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
+        "projectUniqueName": "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
         "projectName": "cashierAPI",
-        "projectPath": "d:\\jelang\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
+        "projectPath": "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
         "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "d:\\jelang\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\obj\\",
+        "outputPath": "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -10993,11 +10993,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\jelang\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
+      "projectUniqueName": "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
       "projectName": "cashierAPI",
-      "projectPath": "D:\\jelang\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
+      "projectPath": "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
       "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-      "outputPath": "D:\\jelang\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\obj\\",
+      "outputPath": "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
