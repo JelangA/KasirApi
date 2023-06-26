@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace cashierAPI.Models
 {
@@ -7,20 +7,10 @@ namespace cashierAPI.Models
     {
         [Key]
         public int id_variant { get; set; }
-
-        [Required]
+        public string nama_variant { get; set; }
         public int product_id { get; set; }
 
-        [Required]
-        public string? nama_variant { get; set; }
-
-        [Required]
-        public int harga_tambahan { get; set; }
-
-        [Required]
-        public int stok { get; set; }
-
-        public string? keterangan { get; set; }
+        [JsonIgnore]
+        public Product? product { get; set; }
     }
-
 }

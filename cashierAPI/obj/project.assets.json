@@ -10993,20 +10993,22 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
+      "projectUniqueName": "D:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
       "projectName": "cashierAPI",
-      "projectPath": "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
+      "projectPath": "D:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
       "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-      "outputPath": "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\obj\\",
+      "outputPath": "D:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
-        "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -11075,7 +11077,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
       }
     }
   }

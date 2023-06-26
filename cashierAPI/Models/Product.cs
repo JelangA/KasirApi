@@ -1,5 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace cashierAPI.Models
 {
@@ -7,24 +6,8 @@ namespace cashierAPI.Models
     {
         [Key]
         public int id_product { get; set; }
-
-        [Required]
-        public int jenis_barang_id { get; set; }
-
-        [Required]
-        public string? nama_product { get; set; }
-
-        [Required]
-        public int harga { get; set; }
-
-        [Required]
-        public int total_stock { get; set; }
-
-        public string? deskripsi { get; set; }
-
-        [Required]
-        public bool status { get; set; }
-
+        public int jenis_product { get; set; }
+        public string nama_product { get; set; }
+        public ICollection<Variant> variants { get; } = new List<Variant>();
     }
-
 }
