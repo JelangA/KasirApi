@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using cashierAPI.Models;
-using cashierAPI.database;
-using cashierAPI.Models.dto;
+using cashierAPI.database;  
 
 namespace cashierAPI.Controllers
 {

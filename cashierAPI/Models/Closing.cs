@@ -15,6 +15,7 @@ namespace cashierAPI.Models
         public DateTime createdAt { get; set; }
         public DateTime updatedAt { get; set; }
 
+        [JsonIgnore]
         public Variant? variant { get; set; }
     }
 }
