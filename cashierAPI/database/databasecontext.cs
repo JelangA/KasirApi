@@ -11,6 +11,7 @@ namespace cashierAPI.database
         {
         }
 
+        public DbSet<Closing> Closings { get; set; }
         public DbSet<Variant> Variants { get; set; }
         public DbSet<Product> Products { get; set; }
 
@@ -21,6 +22,11 @@ namespace cashierAPI.database
                 .HasMany(e => e.variants)
                 .WithOne(e => e.product)
                 .HasForeignKey(e => e.product_id);
+
+            modelBuilder.Entity<Variant>()
+                .HasOne(e => e.closing)
+                .WithOne(e => e.variant)
+                .HasForeignKey<Closing>(e => e.variant_id);
 
             base.OnModelCreating(modelBuilder);
             
