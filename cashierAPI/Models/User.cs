@@ -6,13 +6,21 @@ namespace cashierAPI.Models
     {
         [Key]
         public int id_user { get; set; }
-        public string? nama_user { get; set; }
-        public string? email { get; set; }
-        public string? password { get; set; }
-        public string? gender { get; set; }
-        public string? no_telp { get; set; }
-        public string? alamat { get; set; }
-        public string? role { get; set; }
+        [Required]
+        public string nama_user { get; set; }
+        [Required]
+        public string email { get; set; }
+        [Required]
+        public string password { get; set; }
+        [Required]
+        public string gender { get; set; }
+        [Required]
+        public string no_telp { get; set; }
+        [Required]
+        public string alamat { get; set; }
+        [Required]
+        public string role { get; set; }
+
         public AkunCS? akun { get; set; }
     }
 }
