@@ -9,22 +9,22 @@ namespace cashierAPI.Models
         public int id_user { get; set; }
 
         [Required]
-        public required string nama_user { get; set; }
+        public string? nama_user { get; set; }
 
         [Required]
-        public required string email { get; set; }
+        public string? email { get; set; }
 
         [Required]
-        public required string password { get; set; }
+        public string? password { get; set; }
 
         [Required]
-        public required string gender { get; set; }
+        public string? gender { get; set; }
 
         [Required]
-        public required string no_telpon { get; set; }
+        public string? no_telpon { get; set; }
 
         [Required]
-        public required string alamat { get; set; }
+        public string? alamat { get; set; }
 
         [JsonIgnore]
         public AkunCs? AkunCs { get; set; }

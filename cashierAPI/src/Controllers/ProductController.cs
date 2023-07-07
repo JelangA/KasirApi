@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using cashierAPI.Models;
 using cashierAPI.database;
+using cashierAPI.src.util;
 
 namespace cashierAPI.Controllers
 {
@@ -23,14 +24,18 @@ namespace cashierAPI.Controllers
 
         // GET: api/Product
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<Respons<Product>>> GetProducts()
         {
-          if (_context.Products == null)
-          {
-              return NotFound();
-          }
             var products = await _context.Products.Include(p => p.variants).ToListAsync();
-            return Ok(products);
+
+            if (_context.Products == null)
+            {
+                return NotFound();
+            }
+
+            var hasil = new Respons<Product>(products);
+            
+            return Ok(hasil);
         }
 
         // GET: api/Product/5

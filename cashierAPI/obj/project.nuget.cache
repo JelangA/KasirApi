@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+Axvo0F2xG+P5JVWUeoFH7UdOfVMh7Oomlz9n3IDnQhkzxCt2VOx2h6yAYktJnpz0Z9TlzqWJc8PtlVzsAcVcw==",
+  "dgSpecHash": "EpkKpsQpthJM8iz6FaI4FXcoE3yq0SH7/1SGiDG6PQizS7yMQ1XKT/9dZXjd0PJSIhl+TjUlEcEwKS4Le5eYtQ==",
   "success": true,
-  "projectFilePath": "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
+  "projectFilePath": "D:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

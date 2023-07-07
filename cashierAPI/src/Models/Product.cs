@@ -9,9 +9,9 @@ namespace cashierAPI.Models
         [Key]
         public int id_product { get; set; }
         [Required]
-        public required string jenis_product { get; set; }
+        public string? jenis_product { get; set; }
         [Required]
-        public required string nama_product { get; set; }
+        public string? nama_product { get; set; }
         [Required]
         public int harga_satuan { get; set; }
         [Required]

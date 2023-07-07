@@ -7,10 +7,10 @@ namespace cashierAPI.Models
     {
         [Key]
         public int id_variant { get; set; }
-        public required string nama_variant { get; set; }
+        public string? nama_variant { get; set; }
         public int harga_tambahan { get; set; }
         public int stok { get; set; }
-        public required string keterangan { get; set; }
+        public string? keterangan { get; set; }
         public DateTime expired_date { get; set; }
         public int product_id { get; set; }
 
@@ -19,7 +19,5 @@ namespace cashierAPI.Models
 
         [JsonIgnore]
         public Closing? closing { get; set; }
-
-
     }
 }

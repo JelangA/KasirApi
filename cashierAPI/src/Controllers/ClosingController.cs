@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using cashierAPI.Models;
-using cashierAPI.database;  
+using cashierAPI.database;
+using cashierAPI.src.util;
 
 namespace cashierAPI.Controllers
 {
@@ -23,7 +24,7 @@ namespace cashierAPI.Controllers
 
         // GET: api/Closingasdasd
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Closing>>> Getclosings()
+        public async Task<ActionResult<Respons<Closing>>> Getclosings()
         {
             var closings = await _context.Closings.Include(c => c.variant).ToListAsync();
 
@@ -32,7 +33,9 @@ namespace cashierAPI.Controllers
                 return NotFound();
             }
 
-            return closings;
+            var hasil = new Respons<Closing>(closings);
+
+            return hasil;
         }
 
         // GET: api/Closing/5
@@ -80,7 +83,6 @@ namespace cashierAPI.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
 

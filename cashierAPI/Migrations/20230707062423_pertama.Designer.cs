@@ -11,8 +11,8 @@ using cashierAPI.database;
 namespace cashierAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230628051226_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230707062423_pertama")]
+    partial class pertama
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,6 +22,26 @@ namespace cashierAPI.Migrations
                 .HasAnnotation("ProductVersion", "7.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("cashierAPI.Models.AkunCs", b =>
+                {
+                    b.Property<int>("id_akunCs")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("id_user")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("status")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("id_akunCs");
+
+                    b.HasIndex("id_user")
+                        .IsUnique();
+
+                    b.ToTable("AkunCs");
+                });
+
             modelBuilder.Entity("cashierAPI.Models.Closing", b =>
                 {
                     b.Property<int>("id_closing")
@@ -29,11 +49,13 @@ namespace cashierAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("alamat_pegiriman")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("konsumen_id")
+                        .HasColumnType("longtext");
 
                     b.Property<int>("quantity")
                         .HasColumnType("int");
@@ -90,6 +112,41 @@ namespace cashierAPI.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("cashierAPI.Models.User", b =>
+                {
+                    b.Property<int>("id_user")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("alamat")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("gender")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("nama_user")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("no_telpon")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("id_user");
+
+                    b.ToTable("users");
+                });
+
             modelBuilder.Entity("cashierAPI.Models.Variant", b =>
                 {
                     b.Property<int>("id_variant")
@@ -103,11 +160,9 @@ namespace cashierAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("keterangan")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("nama_variant")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("product_id")
@@ -121,6 +176,17 @@ namespace cashierAPI.Migrations
                     b.HasIndex("product_id");
 
                     b.ToTable("Variants");
+                });
+
+            modelBuilder.Entity("cashierAPI.Models.AkunCs", b =>
+                {
+                    b.HasOne("cashierAPI.Models.User", "User")
+                        .WithOne("AkunCs")
+                        .HasForeignKey("cashierAPI.Models.AkunCs", "id_user")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("cashierAPI.Models.Closing", b =>
@@ -148,6 +214,11 @@ namespace cashierAPI.Migrations
             modelBuilder.Entity("cashierAPI.Models.Product", b =>
                 {
                     b.Navigation("variants");
+                });
+
+            modelBuilder.Entity("cashierAPI.Models.User", b =>
+                {
+                    b.Navigation("AkunCs");
                 });
 
             modelBuilder.Entity("cashierAPI.Models.Variant", b =>
