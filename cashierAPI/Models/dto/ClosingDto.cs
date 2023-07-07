@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace cashierAPI.Models
+namespace cashierAPI.Models.dto
 {
-    public class Closing
+    public class ClosingDto
     {
-        [Key]
         public int id_closing { get; set; }
         public required string alamat_pegiriman { get; set; }
         public int status { get; set; }
@@ -14,8 +13,6 @@ namespace cashierAPI.Models
         public int variant_id { get; set; }
         public DateTime createdAt { get; set; }
         public DateTime updatedAt { get; set; }
-
-        [JsonIgnore]
-        public Variant? variant { get; set; }
+    
     }
 }

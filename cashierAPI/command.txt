@@ -7,10 +7,6 @@ initial{
     dotnet ef database update
 }
 
-hapus tabel{
-
-}
-
 hapus database{
 
     //pilih migrasi
@@ -23,6 +19,8 @@ hapus database{
     dotnet ef migrations remove
 }
 
-command OP!!! crud auto {
+controller command {
+
      dotnet-aspnet-codegenerator controller -name <AkunCSController> -async -api -m <AkunCS> -dc <databaseContext> -outDir Controllers
+
 }
