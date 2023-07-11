@@ -8,15 +8,14 @@ namespace cashierAPI.Models
     {
         [Key]
         public int id_akunCs { get; set; }
-
         [ForeignKey("User")]
-        public int id_user { get; set; }
-
+        public int? user_id { get; set; }
         [Required]
         public bool status { get; set; }
 
         [JsonIgnore]
         public User? User { get; set; }
-
+        [JsonIgnore]
+        public Konsumen? Konsumen { get; set; }
     }
 }

@@ -838,3 +838,5 @@ D:\jelang\programming\web\dotnet\backend\KasirApi\cashierAPI\obj\Debug\net7.0\re
 D:\jelang\programming\web\dotnet\backend\KasirApi\cashierAPI\obj\Debug\net7.0\cashierAPI.pdb
 D:\jelang\programming\web\dotnet\backend\KasirApi\cashierAPI\obj\Debug\net7.0\cashierAPI.genruntimeconfig.cache
 D:\jelang\programming\web\dotnet\backend\KasirApi\cashierAPI\obj\Debug\net7.0\ref\cashierAPI.dll
+D:\jelang\programming\web\dotnet\backend\KasirApi\cashierAPI\bin\Debug\net7.0\AutoMapper.dll
+D:\jelang\programming\web\dotnet\backend\KasirApi\cashierAPI\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

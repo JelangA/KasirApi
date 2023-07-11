@@ -68,11 +68,11 @@ namespace cashierAPI.Migrations
                 {
                     idvariant = table.Column<int>(name: "id_variant", type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    namavariant = table.Column<string>(name: "nama_variant", type: "longtext", nullable: true)
+                    namavariant = table.Column<string>(name: "nama_variant", type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     hargatambahan = table.Column<int>(name: "harga_tambahan", type: "int", nullable: false),
                     stok = table.Column<int>(type: "int", nullable: false),
-                    keterangan = table.Column<string>(type: "longtext", nullable: true)
+                    keterangan = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     expireddate = table.Column<DateTime>(name: "expired_date", type: "datetime(6)", nullable: false),
                     productid = table.Column<int>(name: "product_id", type: "int", nullable: false)
@@ -95,17 +95,41 @@ namespace cashierAPI.Migrations
                 {
                     idakunCs = table.Column<int>(name: "id_akunCs", type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    iduser = table.Column<int>(name: "id_user", type: "int", nullable: false),
+                    userid = table.Column<int>(name: "user_id", type: "int", nullable: false),
                     status = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AkunCs", x => x.idakunCs);
                     table.ForeignKey(
-                        name: "FK_AkunCs_users_id_user",
-                        column: x => x.iduser,
+                        name: "FK_AkunCs_users_user_id",
+                        column: x => x.userid,
                         principalTable: "users",
                         principalColumn: "id_user",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "konsumens",
+                columns: table => new
+                {
+                    idKonsumen = table.Column<int>(name: "id_Konsumen", type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    AkunCsid = table.Column<int>(name: "AkunCs_id", type: "int", nullable: false),
+                    namakonsumen = table.Column<string>(name: "nama_konsumen", type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    kontak = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_konsumens", x => x.idKonsumen);
+                    table.ForeignKey(
+                        name: "FK_konsumens_AkunCs_AkunCs_id",
+                        column: x => x.AkunCsid,
+                        principalTable: "AkunCs",
+                        principalColumn: "id_akunCs",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -116,14 +140,13 @@ namespace cashierAPI.Migrations
                 {
                     idclosing = table.Column<int>(name: "id_closing", type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    alamatpegiriman = table.Column<string>(name: "alamat_pegiriman", type: "longtext", nullable: true)
+                    alamatpegiriman = table.Column<string>(name: "alamat_pegiriman", type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     status = table.Column<int>(type: "int", nullable: false),
                     totalharga = table.Column<int>(name: "total_harga", type: "int", nullable: false),
                     quantity = table.Column<int>(type: "int", nullable: false),
                     variantid = table.Column<int>(name: "variant_id", type: "int", nullable: false),
-                    konsumenid = table.Column<string>(name: "konsumen_id", type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    konsumenid = table.Column<int>(name: "konsumen_id", type: "int", nullable: true),
                     createdAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     updatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -136,19 +159,34 @@ namespace cashierAPI.Migrations
                         principalTable: "Variants",
                         principalColumn: "id_variant",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Closings_konsumens_konsumen_id",
+                        column: x => x.konsumenid,
+                        principalTable: "konsumens",
+                        principalColumn: "id_Konsumen");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AkunCs_id_user",
+                name: "IX_AkunCs_user_id",
                 table: "AkunCs",
-                column: "id_user",
+                column: "user_id",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Closings_konsumen_id",
+                table: "Closings",
+                column: "konsumen_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Closings_variant_id",
                 table: "Closings",
-                column: "variant_id",
+                column: "variant_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_konsumens_AkunCs_id",
+                table: "konsumens",
+                column: "AkunCs_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -161,19 +199,22 @@ namespace cashierAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AkunCs");
-
-            migrationBuilder.DropTable(
                 name: "Closings");
-
-            migrationBuilder.DropTable(
-                name: "users");
 
             migrationBuilder.DropTable(
                 name: "Variants");
 
             migrationBuilder.DropTable(
+                name: "konsumens");
+
+            migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "AkunCs");
+
+            migrationBuilder.DropTable(
+                name: "users");
         }
     }
 }

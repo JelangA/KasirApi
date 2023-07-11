@@ -21,6 +21,7 @@ namespace cashierAPI.Models
         [Required]
         public bool status { get; set; }
 
+        [JsonIgnore]
         public ICollection<Variant> variants { get; } = new List<Variant>();
     }
 }

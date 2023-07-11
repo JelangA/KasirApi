@@ -5,7 +5,7 @@ namespace cashierAPI.database
 {
     public class DatabaseContext : DbContext
     {
-
+        public DbSet<Konsumen> konsumens { get; set; } = null!;  
         public DbSet<Closing> Closings { get; set; } = null!;
         public DbSet<Variant> Variants { get; set; } = null!;
         public DbSet<Product> Products { get; set; } = null!;
@@ -20,10 +20,28 @@ namespace cashierAPI.database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            // modelBuilder.Entity<Closing>()
+            //     .HasOne(e => e.konsumen)
+            //     .WithMany(e => e.Closings)
+            //     .HasForeignKey<Closing>(e => e.kon)
+
+            modelBuilder.Entity<Konsumen>()
+                .HasMany(e => e.Closings)
+                .WithOne(e => e.konsumen)
+                .HasForeignKey(e => e.konsumen_id)
+                .IsRequired(false);
+
+            modelBuilder.Entity<AkunCs>()
+                .HasOne(e => e.Konsumen)
+                .WithOne(e => e.AkunCs)
+                .HasForeignKey<Konsumen>(e => e.AkunCs_id)
+                .IsRequired();
+
             modelBuilder.Entity<User>()
                 .HasOne(e => e.AkunCs)
                 .WithOne(e => e.User)
-                .HasForeignKey<AkunCs>(e => e.id_user);
+                .HasForeignKey<AkunCs>(e => e.user_id)
+                .IsRequired();
 
             modelBuilder.Entity<Product>()
                 .HasMany(e => e.variants)
@@ -31,9 +49,9 @@ namespace cashierAPI.database
                 .HasForeignKey(e => e.product_id);
 
             modelBuilder.Entity<Variant>()
-                .HasOne(e => e.closing)
-                .WithOne(e => e.variant)
-                .HasForeignKey<Closing>(e => e.variant_id);
+                .HasMany(v => v.closings) // Relasi one-to-many dari Variant ke Closing
+                .WithOne(c => c.variant)
+                .HasForeignKey(c => c.variant_id);
 
             base.OnModelCreating(modelBuilder);
             

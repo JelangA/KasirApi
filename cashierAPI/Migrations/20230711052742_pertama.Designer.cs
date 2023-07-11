@@ -11,7 +11,7 @@ using cashierAPI.database;
 namespace cashierAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230707062423_pertama")]
+    [Migration("20230711052742_pertama")]
     partial class pertama
     {
         /// <inheritdoc />
@@ -28,15 +28,16 @@ namespace cashierAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("id_user")
-                        .HasColumnType("int");
-
                     b.Property<bool>("status")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int?>("user_id")
+                        .IsRequired()
+                        .HasColumnType("int");
+
                     b.HasKey("id_akunCs");
 
-                    b.HasIndex("id_user")
+                    b.HasIndex("user_id")
                         .IsUnique();
 
                     b.ToTable("AkunCs");
@@ -49,13 +50,14 @@ namespace cashierAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("alamat_pegiriman")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("konsumen_id")
-                        .HasColumnType("longtext");
+                    b.Property<int?>("konsumen_id")
+                        .HasColumnType("int");
 
                     b.Property<int>("quantity")
                         .HasColumnType("int");
@@ -74,10 +76,37 @@ namespace cashierAPI.Migrations
 
                     b.HasKey("id_closing");
 
-                    b.HasIndex("variant_id")
-                        .IsUnique();
+                    b.HasIndex("konsumen_id");
+
+                    b.HasIndex("variant_id");
 
                     b.ToTable("Closings");
+                });
+
+            modelBuilder.Entity("cashierAPI.Models.Konsumen", b =>
+                {
+                    b.Property<int>("id_Konsumen")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AkunCs_id")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("kontak")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("nama_konsumen")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("id_Konsumen");
+
+                    b.HasIndex("AkunCs_id")
+                        .IsUnique();
+
+                    b.ToTable("konsumens");
                 });
 
             modelBuilder.Entity("cashierAPI.Models.Product", b =>
@@ -160,9 +189,11 @@ namespace cashierAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("keterangan")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("nama_variant")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("product_id")
@@ -182,7 +213,7 @@ namespace cashierAPI.Migrations
                 {
                     b.HasOne("cashierAPI.Models.User", "User")
                         .WithOne("AkunCs")
-                        .HasForeignKey("cashierAPI.Models.AkunCs", "id_user")
+                        .HasForeignKey("cashierAPI.Models.AkunCs", "user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -191,13 +222,30 @@ namespace cashierAPI.Migrations
 
             modelBuilder.Entity("cashierAPI.Models.Closing", b =>
                 {
+                    b.HasOne("cashierAPI.Models.Konsumen", "konsumen")
+                        .WithMany("Closings")
+                        .HasForeignKey("konsumen_id");
+
                     b.HasOne("cashierAPI.Models.Variant", "variant")
-                        .WithOne("closing")
-                        .HasForeignKey("cashierAPI.Models.Closing", "variant_id")
+                        .WithMany("closings")
+                        .HasForeignKey("variant_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("konsumen");
+
                     b.Navigation("variant");
+                });
+
+            modelBuilder.Entity("cashierAPI.Models.Konsumen", b =>
+                {
+                    b.HasOne("cashierAPI.Models.AkunCs", "AkunCs")
+                        .WithOne("Konsumen")
+                        .HasForeignKey("cashierAPI.Models.Konsumen", "AkunCs_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AkunCs");
                 });
 
             modelBuilder.Entity("cashierAPI.Models.Variant", b =>
@@ -209,6 +257,16 @@ namespace cashierAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("product");
+                });
+
+            modelBuilder.Entity("cashierAPI.Models.AkunCs", b =>
+                {
+                    b.Navigation("Konsumen");
+                });
+
+            modelBuilder.Entity("cashierAPI.Models.Konsumen", b =>
+                {
+                    b.Navigation("Closings");
                 });
 
             modelBuilder.Entity("cashierAPI.Models.Product", b =>
@@ -223,7 +281,7 @@ namespace cashierAPI.Migrations
 
             modelBuilder.Entity("cashierAPI.Models.Variant", b =>
                 {
-                    b.Navigation("closing");
+                    b.Navigation("closings");
                 });
 #pragma warning restore 612, 618
         }

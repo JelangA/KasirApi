@@ -42,10 +42,10 @@ namespace cashierAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Closing>> GetClosing(int id)
         {
-          if (_context.Closings == null)
-          {
-              return NotFound();
-          }
+            if (_context.Closings == null)
+            {
+                return NotFound();
+            }
             var closing = await _context.Closings.FindAsync(id);
 
             if (closing == null)
@@ -91,10 +91,16 @@ namespace cashierAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Closing>> PostClosing(Closing closing)
         {
-          if (_context.Closings == null)
-          {
-              return Problem("Entity set 'DatabaseContext.Closings'  is null.");
-          }
+            if (_context.Closings == null)
+            {
+                return Problem("Entity set 'DatabaseContext.Closings'  is null.");
+            }
+
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             _context.Closings.Add(closing);
             await _context.SaveChangesAsync();
 

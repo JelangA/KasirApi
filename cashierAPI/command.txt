@@ -21,6 +21,6 @@ hapus database{
 
 controller command {
 
-     dotnet-aspnet-codegenerator controller -name <AkunCSController> -async -api -m <AkunCS> -dc <databaseContext> -outDir Controllers
+     dotnet-aspnet-codegenerator controller -name <AkunCSController> -async -api -m <AkunCS> -dc <databaseContext> -outDir src/Controllers
 
 }
