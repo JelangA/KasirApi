@@ -1,10 +1,8 @@
 using cashierAPI.database;
-using cashierAPI.dto;
 using cashierAPI.Models;
-using cashierAPI.Repositories;
 using cashierAPI.src.util;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace cashierAPI.Controllers;
 
@@ -12,74 +10,122 @@ namespace cashierAPI.Controllers;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly UserRepo _UserRepo;
     private readonly DatabaseContext _context;
 
     public UserController(DatabaseContext context)
     {
         _context = context;
-        _UserRepo = new UserRepo(_context);
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(Respons<UserDto>), 200)]
-    [ProducesResponseType(404)]
-    [ProducesResponseType(500)]
-    // [ProducesResponseType(typeof(ErrorResponse), 500)]
-    public IActionResult GetUsers()
+    [ProducesResponseType(typeof(Response<User>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseErr), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<Response<User>>> Getusers()
     {
         try
         {
-            var userList = _UserRepo.GetUser();
-
-            if (userList == null || userList.Count == 0)
-            {
-                return NotFound();
-            }
-
-            var response = new Respons<UserDto>(userList);
-
-            return Ok(response);
+            var user = await _context.users.Include(u => u.AkunCs).ToListAsync();
+            return new Response<User>(user);
         }
-        catch (Exception ex)
+        catch (Exception err)
         {
-            // Tangani kesalahan dan kirim respons yang sesuai
-            return StatusCode(StatusCodes.Status500InternalServerError, "error : " + ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new ResponseErr(null, err.Message));
         }
     }
 
-    [HttpPost]
-    [ProducesResponseType(typeof(UserDto), 201)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(500)]
-    public IActionResult CreateUser(UserDto userDto)
+    // GET: api/User/5
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseNotFound), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ResponseErr), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<User>> GetUser(int id)
     {
+        var User = await _context.users.FindAsync(id);
 
-        if (!ModelState.IsValid)
+        if (User == null)
         {
-            return BadRequest(ModelState);
+            return NotFound();
         }
-        
+
+        return User;
+    }
+
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ResponseErr))]
+    public async Task<ActionResult<User>> TambahUser([FromBody] User user)
+    {
         try
         {
-            var user = new User
-            {
-                nama_user = userDto.nama_user,
-                email = userDto.email,
-                password = userDto.password,
-                gender = userDto.gender,
-                no_telpon = userDto.no_telpon,
-                alamat = userDto.alamat
-            };
+            _context.users.Add(user);
+            await _context.SaveChangesAsync();
 
-            var createUser = _UserRepo.CreateUser(user);
-
-            return CreatedAtAction(nameof(GetUsers), new { id = createUser.id_user }, createUser);
-
+            return CreatedAtAction(nameof(Getusers), new { id = user.id_user }, user);
         }
-        catch (Exception ex)
+        catch (Exception err)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "error : " + ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new ResponseErr(null, err.Message));
         }
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ResponseErr))]
+    public async Task<IActionResult> PutUser(int id, User user)
+    {
+        if (id != user.id_user)
+        {
+            return BadRequest();
+        }
+
+        _context.Entry(user).State = EntityState.Modified;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            return Ok(user);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!userExists(id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ResponseErr))]
+    public async Task<IActionResult> DeleteUser(int id)
+    {
+        if (_context.users == null)
+        {
+            return NotFound();
+        }
+        var user = await _context.users.FindAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        _context.users.Remove(user);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    private bool userExists(int id)
+    {
+        return (_context.users?.Any(e => e.id_user == id)).GetValueOrDefault();
     }
 }

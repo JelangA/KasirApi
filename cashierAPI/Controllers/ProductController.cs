@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using cashierAPI.Models;
@@ -24,31 +19,32 @@ namespace cashierAPI.Controllers
 
         // GET: api/Product
         [HttpGet]
-        public async Task<ActionResult<Respons<Product>>> GetProducts()
+        [ProducesResponseType(typeof(Response<Product>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ResponseErr), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            var products = await _context.Products.Include(p => p.variants).ToListAsync();
 
-            if (_context.Products == null)
+            var product = await _context.Products.ToListAsync();
+            if (product == null)
             {
-                return NotFound();
+                return NoContent();
             }
-
-            var hasil = new Respons<Product>(products);
-            
-            return Ok(hasil);
+            return Ok(new Response<Product>(product));
         }
 
         // GET: api/Product/5
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseNotFound) ,StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseErr), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-          if (_context.Products == null)
-          {
-              return NotFound();
-          }
-            var product = await _context.Products
-                .Include(p => p.variants)
-                .FirstOrDefaultAsync(p => p.id_product == id);
+            if (_context.Products == null)
+            {
+                return NotFound();
+            }
+            var product = await _context.Products.FindAsync(id);
 
             if (product == null)
             {
@@ -92,16 +88,27 @@ namespace cashierAPI.Controllers
         // POST: api/Product
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Product))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ResponseErr))]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-          if (_context.Products == null)
-          {
-              return Problem("Entity set 'DatabaseContext.Products'  is null.");
-          }
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+            try
+            {
+                if (_context.Products == null)
+                {
+                    return NoContent();
+                }
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", new { id = product.id_product }, product);
+                return CreatedAtAction(nameof(GetProduct), new { id = product.id_product }, product);
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseErr(null, err.Message));
+            }
+
         }
 
         // DELETE: api/Product/5

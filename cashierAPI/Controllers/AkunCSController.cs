@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using cashierAPI.Models;
@@ -10,39 +5,36 @@ using cashierAPI.database;
 
 namespace cashierAPI.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
-    public class AkunCsController : ControllerBase
+    public class AkunCSController : ControllerBase
     {
         private readonly DatabaseContext _context;
 
-        public AkunCsController(DatabaseContext context)
+        public AkunCSController(DatabaseContext context)
         {
             _context = context;
         }
 
-        // GET: api/AkunCs
+        // GET: api/AkunCS
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AkunCs>>> GetAkunCs()
         {
-            if (_context.AkunCs == null)
-            {
-                return NotFound();
-            }
-
-            var AkunCs = await _context.AkunCs.Include(e => e.User).ToListAsync();
-            return AkunCs;
+          if (_context.AkunCs == null)
+          {
+              return NotFound();
+          }
+            return await _context.AkunCs.ToListAsync();
         }
 
-        // GET: api/AkunCs/5
+        // GET: api/AkunCS/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AkunCs>> GetAkunCs(int id)
         {
-            if (_context.AkunCs == null)
-            {
-                return NotFound();
-            }
+          if (_context.AkunCs == null)
+          {
+              return NotFound();
+          }
             var akunCs = await _context.AkunCs.FindAsync(id);
 
             if (akunCs == null)
@@ -53,7 +45,7 @@ namespace cashierAPI.Controllers
             return akunCs;
         }
 
-        // PUT: api/AkunCs/5
+        // PUT: api/AkunCS/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAkunCs(int id, AkunCs akunCs)
@@ -84,32 +76,22 @@ namespace cashierAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/AkunCs
+        // POST: api/AkunCS
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [ProducesResponseType(typeof(AkunCsPostResponse), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<AkunCsPostResponse>> PostAkunCs(AkunCsPostResponse req)
+        public async Task<ActionResult<AkunCs>> PostAkunCs(AkunCs akunCs)
         {
-            if (_context.AkunCs == null)
-            {
-                return Problem("Entity set 'DatabaseContext.AkunCs' is null.");
-            }
-
-            var akunCs = new AkunCs
-            {
-                id_akunCs = req.id_akunCs,
-                user_id = req.user_id,
-                status = req.status
-            };
-
+          if (_context.AkunCs == null)
+          {
+              return Problem("Entity set 'DatabaseContext.AkunCs'  is null.");
+          }
             _context.AkunCs.Add(akunCs);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetAkunCs", new { id = akunCs.id_akunCs }, akunCs);
         }
 
-        // DELETE: api/AkunCs/5
+        // DELETE: api/AkunCS/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAkunCs(int id)
         {

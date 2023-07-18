@@ -1,5 +1,5 @@
 using cashierAPI.database;
-using cashierAPI.dto;
+
 using cashierAPI.Models;
 
 namespace cashierAPI.Repositories;
@@ -12,9 +12,9 @@ public class UserRepo
         _context = context;
     }
 
-    public List<UserDto> GetUser(){
+    public List<User> GetUser(){
         return _context.users
-            .Select(p => new UserDto{
+            .Select(p => new User{
                 nama_user = p.nama_user,
                 email = p.email,
                 password = p.password,

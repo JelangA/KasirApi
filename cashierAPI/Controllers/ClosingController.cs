@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using cashierAPI.Models;
 using cashierAPI.database;
-using cashierAPI.src.util;
 
 namespace cashierAPI.Controllers
 {
@@ -22,30 +16,25 @@ namespace cashierAPI.Controllers
             _context = context;
         }
 
-        // GET: api/Closingasdasd
+        // GET: api/Closing
         [HttpGet]
-        public async Task<ActionResult<Respons<Closing>>> Getclosings()
+        public async Task<ActionResult<IEnumerable<Closing>>> GetClosings()
         {
-            var closings = await _context.Closings.Include(c => c.variant).ToListAsync();
-
-            if (closings == null)
-            {
-                return NotFound();
-            }
-
-            var hasil = new Respons<Closing>(closings);
-
-            return hasil;
+          if (_context.Closings == null)
+          {
+              return NotFound();
+          }
+            return await _context.Closings.ToListAsync();
         }
 
         // GET: api/Closing/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Closing>> GetClosing(int id)
         {
-            if (_context.Closings == null)
-            {
-                return NotFound();
-            }
+          if (_context.Closings == null)
+          {
+              return NotFound();
+          }
             var closing = await _context.Closings.FindAsync(id);
 
             if (closing == null)
@@ -83,6 +72,7 @@ namespace cashierAPI.Controllers
                     throw;
                 }
             }
+
             return NoContent();
         }
 
@@ -91,16 +81,10 @@ namespace cashierAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Closing>> PostClosing(Closing closing)
         {
-            if (_context.Closings == null)
-            {
-                return Problem("Entity set 'DatabaseContext.Closings'  is null.");
-            }
-
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
+          if (_context.Closings == null)
+          {
+              return Problem("Entity set 'DatabaseContext.Closings'  is null.");
+          }
             _context.Closings.Add(closing);
             await _context.SaveChangesAsync();
 

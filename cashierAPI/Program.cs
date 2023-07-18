@@ -1,7 +1,6 @@
-
 using cashierAPI.database;
+using cashierAPI.middelware;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,13 +10,16 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // Add services to the container.
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 26))));
-    
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Error handling middleware
+app.UseMiddleware<JsonErrorHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

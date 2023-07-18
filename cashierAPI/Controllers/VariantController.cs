@@ -12,55 +12,55 @@ namespace cashierAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class VariantController : ControllerBase
     {
         private readonly DatabaseContext _context;
 
-        public UserController(DatabaseContext context)
+        public VariantController(DatabaseContext context)
         {
             _context = context;
         }
 
-        // GET: api/User
+        // GET: api/Variant
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> Getusers()
+        public async Task<ActionResult<IEnumerable<Variant>>> GetVariants()
         {
-          if (_context.users == null)
+          if (_context.Variants == null)
           {
               return NotFound();
           }
-            return await _context.users.ToListAsync();
+            return await _context.Variants.ToListAsync();
         }
 
-        // GET: api/User/5
+        // GET: api/Variant/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<Variant>> GetVariant(int id)
         {
-          if (_context.users == null)
+          if (_context.Variants == null)
           {
               return NotFound();
           }
-            var user = await _context.users.FindAsync(id);
+            var variant = await _context.Variants.FindAsync(id);
 
-            if (user == null)
+            if (variant == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return variant;
         }
 
-        // PUT: api/User/5
+        // PUT: api/Variant/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutVariant(int id, Variant variant)
         {
-            if (id != user.id_user)
+            if (id != variant.id_variant)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(variant).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace cashierAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!VariantExists(id))
                 {
                     return NotFound();
                 }
@@ -81,44 +81,44 @@ namespace cashierAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/User
+        // POST: api/Variant
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<Variant>> PostVariant(Variant variant)
         {
-          if (_context.users == null)
+          if (_context.Variants == null)
           {
-              return Problem("Entity set 'DatabaseContext.users'  is null.");
+              return Problem("Entity set 'DatabaseContext.Variants'  is null.");
           }
-            _context.users.Add(user);
+            _context.Variants.Add(variant);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.id_user }, user);
+            return CreatedAtAction("GetVariant", new { id = variant.id_variant }, variant);
         }
 
-        // DELETE: api/User/5
+        // DELETE: api/Variant/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteVariant(int id)
         {
-            if (_context.users == null)
+            if (_context.Variants == null)
             {
                 return NotFound();
             }
-            var user = await _context.users.FindAsync(id);
-            if (user == null)
+            var variant = await _context.Variants.FindAsync(id);
+            if (variant == null)
             {
                 return NotFound();
             }
 
-            _context.users.Remove(user);
+            _context.Variants.Remove(variant);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool UserExists(int id)
+        private bool VariantExists(int id)
         {
-            return (_context.users?.Any(e => e.id_user == id)).GetValueOrDefault();
+            return (_context.Variants?.Any(e => e.id_variant == id)).GetValueOrDefault();
         }
     }
 }

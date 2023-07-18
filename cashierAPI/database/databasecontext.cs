@@ -19,12 +19,6 @@ namespace cashierAPI.database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            // modelBuilder.Entity<Closing>()
-            //     .HasOne(e => e.konsumen)
-            //     .WithMany(e => e.Closings)
-            //     .HasForeignKey<Closing>(e => e.kon)
-
             modelBuilder.Entity<Konsumen>()
                 .HasMany(e => e.Closings)
                 .WithOne(e => e.konsumen)
