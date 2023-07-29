@@ -1,5 +1,7 @@
+using AutoMapper;
 using cashierAPI.database;
 using cashierAPI.Models;
+using cashierAPI.Models.dto;
 using cashierAPI.src.util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +13,11 @@ namespace cashierAPI.Controllers;
 public class UserController : ControllerBase
 {
     private readonly DatabaseContext _context;
-
-    public UserController(DatabaseContext context)
+    private readonly IMapper _mapper;
+    public UserController(DatabaseContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,9 +27,10 @@ public class UserController : ControllerBase
     public async Task<ActionResult<Response<User>>> Getusers()
     {
         try
-        {
-            var user = await _context.users.Include(u => u.AkunCs).ToListAsync();
-            return new Response<User>(user);
+        {   
+            var user = await _context.users.ToListAsync();
+            var res = new Response<User>(user);
+            return Ok(res);
         }
         catch (Exception err)
         {
@@ -56,14 +60,16 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ResponseErr))]
-    public async Task<ActionResult<User>> TambahUser([FromBody] User user)
+    public async Task<ActionResult<User>> TambahUser([FromBody] UserDto user)
     {
         try
         {
-            _context.users.Add(user);
+            var usercreate = _mapper.Map<User>(user);
+            _context.users.Add(usercreate);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(Getusers), new { id = user.id_user }, user);
+            var newUser = await _context.users.FindAsync(usercreate.id_user);
+            return CreatedAtAction(nameof(Getusers), new { id = usercreate.id_user }, newUser);
         }
         catch (Exception err)
         {
@@ -72,22 +78,32 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseNotFound))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ResponseErr))]
-    public async Task<IActionResult> PutUser(int id, User user)
+    public async Task<IActionResult> PutUser(int id, UserDto user)
     {
-        if (id != user.id_user)
+        if (id <= 0)
         {
             return BadRequest();
         }
 
-        _context.Entry(user).State = EntityState.Modified;
+        var existingUser = await _context.users.FindAsync(id);
+
+        if (existingUser == null)
+        {
+            return NotFound();
+        }
+
+        // Menggunakan AutoMapper untuk memetakan data dari userDto ke existingUser
+        _mapper.Map(user, existingUser);
 
         try
         {
             await _context.SaveChangesAsync();
-            return Ok(user);
+            var newUser = await _context.users.FindAsync(id);
+            return Ok(newUser);
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -103,8 +119,8 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseNotFound))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ResponseErr))]
     public async Task<IActionResult> DeleteUser(int id)
     {
@@ -121,7 +137,7 @@ public class UserController : ControllerBase
         _context.users.Remove(user);
         await _context.SaveChangesAsync();
 
-        return NoContent();
+        return Ok(user);
     }
 
     private bool userExists(int id)

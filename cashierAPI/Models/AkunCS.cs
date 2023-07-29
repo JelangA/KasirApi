@@ -13,7 +13,6 @@ namespace cashierAPI.Models
         [Required]
         public bool status { get; set; }
 
-        [JsonIgnore]
         public User? User { get; set; }
         [JsonIgnore]
         public Konsumen? Konsumen { get; set; }

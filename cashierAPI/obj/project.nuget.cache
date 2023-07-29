@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NLpvL9gMKBtwk9EoqX71pS5w5X4cdGCUfl6zrGHtqPR8/TTbSbthueF+Wid2qbPUKdmp1AGUqoIvR+po5ZTIfA==",
+  "dgSpecHash": "+zUpXkPmoOA4QQ0brRz3i7m/q7al01qUJVdq/nmGCCMZy6jEYD5sgiA+3+RX2mtyqjcpz6X4z8VOwFijPgmmZw==",
   "success": true,
-  "projectFilePath": "D:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
+  "projectFilePath": "d:\\jelang\\programming\\web\\dotnet\\backend\\KasirApi\\cashierAPI\\cashierAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

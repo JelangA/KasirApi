@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using cashierAPI.Models;
 using cashierAPI.database;
+using AutoMapper;
+using cashierAPI.src.util;
+using cashierAPI.Models.dto;
 
 namespace cashierAPI.Controllers
 {
@@ -10,32 +13,41 @@ namespace cashierAPI.Controllers
     public class AkunCSController : ControllerBase
     {
         private readonly DatabaseContext _context;
+        private readonly IMapper _mapper;
 
-        public AkunCSController(DatabaseContext context)
+        public AkunCSController(DatabaseContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/AkunCS
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AkunCs>>> GetAkunCs()
+        [ProducesResponseType(typeof(Response<AkunCs>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ResponseErr), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<Response<AkunCs>>> GetAkunCs()
         {
-          if (_context.AkunCs == null)
-          {
-              return NotFound();
-          }
-            return await _context.AkunCs.ToListAsync();
+            try
+            {
+                var akunCs = await _context.AkunCs.Include(e => e.User).ToListAsync();
+                var res = new Response<AkunCs>(akunCs);
+                return Ok(res);
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseErr(null, err.Message));
+            }
         }
 
         // GET: api/AkunCS/5
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Response<AkunCs>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseNotFound), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseErr), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AkunCs>> GetAkunCs(int id)
         {
-          if (_context.AkunCs == null)
-          {
-              return NotFound();
-          }
-            var akunCs = await _context.AkunCs.FindAsync(id);
+            var akunCs = await _context.AkunCs.Include(e => e.User).FirstOrDefaultAsync(e => e.id_akunCs == id);
 
             if (akunCs == null)
             {
@@ -48,6 +60,10 @@ namespace cashierAPI.Controllers
         // PUT: api/AkunCS/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AkunCs))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseNotFound))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ResponseErr))]
         public async Task<IActionResult> PutAkunCs(int id, AkunCs akunCs)
         {
             if (id != akunCs.id_akunCs)
@@ -79,16 +95,36 @@ namespace cashierAPI.Controllers
         // POST: api/AkunCS
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<AkunCs>> PostAkunCs(AkunCs akunCs)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AkunCs))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ResponseErr))]
+        public async Task<ActionResult<AkunCs>> PostAkunCs([FromBody] AkunCSDto akunCs)
         {
-          if (_context.AkunCs == null)
-          {
-              return Problem("Entity set 'DatabaseContext.AkunCs'  is null.");
-          }
-            _context.AkunCs.Add(akunCs);
-            await _context.SaveChangesAsync();
+            if (await _context.AkunCs.AnyAsync(a => a.user_id == akunCs.user_id))
+            {
+                return BadRequest(new ResponseErr("error", "id user is already exist"));
+            }
+            try
+            {
+                var akuncreate = _mapper.Map<AkunCs>(akunCs);
 
-            return CreatedAtAction("GetAkunCs", new { id = akunCs.id_akunCs }, akunCs);
+                _context.AkunCs.Add(akuncreate);
+                await _context.SaveChangesAsync();
+
+                // Cari kembali entitas AkunCs yang baru saja disimpan berdasarkan ID user yang diberikan
+                var newAkun = await _context.AkunCs
+                    .Include(a => a.User) // Menyertakan properti User dalam entitas AkunCs
+                    .FirstOrDefaultAsync(a => a.user_id == akunCs.user_id);
+
+                // Jika entitas AkunCs ditemukan, kembalikan respons dengan kode status 201 Created
+                // serta URI untuk lokasi objek yang baru saja dibuat
+                return CreatedAtAction(nameof(GetAkunCs), new { id = akuncreate.id_akunCs }, newAkun);
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseErr(null, err.Message));
+            }
+
         }
 
         // DELETE: api/AkunCS/5
